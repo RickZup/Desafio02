@@ -63,8 +63,10 @@ public class Main {
                     sistema.exibirVendas();
                     break;
                 case 7:
+                    sistema.pesquisarComprasPorCPF();
                     break;
                 case 8:
+                    sistema.pesquisarComprasPorEmail();
                     break;
                 case 9:
                     sistema.setSistemaRodando(false);

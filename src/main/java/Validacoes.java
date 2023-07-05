@@ -5,5 +5,4 @@ public interface Validacoes {
             throw new IllegalArgumentException("E-mail inválido!");
         }
     }
-
 }

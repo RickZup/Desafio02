@@ -30,6 +30,7 @@ public class RegistroDeVendas implements Validacoes {
         System.out.println("Qual o nome do cliente?");
         String nome = entrada.next();
 
+        System.out.println();
         System.out.println("E o número do CPF?");
         String cpf = entrada.next();
         for (Cliente cliente : listaClientes.values()) {
@@ -42,6 +43,7 @@ public class RegistroDeVendas implements Validacoes {
             }
         }
 
+        System.out.println();
         System.out.println("Só preciso de mais um dado! Informe o e-mail de " + nome + " por favor!");
         String email = entrada.next();
         validarEmail(email);
@@ -58,7 +60,11 @@ public class RegistroDeVendas implements Validacoes {
         Cliente cliente = new Cliente(nome, cpf, email);
         listaClientes.put(nome, cliente); //Populando a lista de clientes.
 
+        System.out.println();
+        System.out.println("--------------------------------------");
         System.out.println(nome + " foi cadastrado com sucesso! :D");
+        System.out.println("--------------------------------------");
+
     }
 
     public void exibirClientes(){
@@ -69,6 +75,11 @@ public class RegistroDeVendas implements Validacoes {
         for (Cliente cliente: listaClientes.values()){
             System.out.println("Nome: " + cliente.getNome());
         }
+
+        if (listaClientes.isEmpty()){
+            System.out.println("Não há clientes cadastrados!");
+        }
+
     }
 
     public void cadastrarVendedor(){
@@ -77,6 +88,7 @@ public class RegistroDeVendas implements Validacoes {
         System.out.println("Qual o nome do vendedor?");
         String nome = entrada.next();
 
+        System.out.println();
         System.out.println("E o número do CPF?");
         String cpf = entrada.next();
         for (Vendedor vendedor : listaVendedores.values()) {
@@ -89,6 +101,7 @@ public class RegistroDeVendas implements Validacoes {
             }
         }
 
+        System.out.println();
         System.out.println("Agora nforme o e-mail de " + nome);
         String email = entrada.next();
         validarEmail(email);
@@ -106,7 +119,9 @@ public class RegistroDeVendas implements Validacoes {
         listaVendedores.put(nome, vendedor); //Populando a lista de vendedores.
 
         System.out.println();
+        System.out.println("-------------------------------------");
         System.out.println(nome + " foi cadastrado como vendedor.");
+        System.out.println("-------------------------------------");
     }
 
     public void exibirVendedores(){
@@ -117,6 +132,11 @@ public class RegistroDeVendas implements Validacoes {
         for (Vendedor vendedor: listaVendedores.values()){
             System.out.println("Nome: " + vendedor.getNome());
         }
+
+        if (listaVendedores.isEmpty()){
+            System.out.println("Não foram encontrados vendedores cadastrados.");
+        }
+
     }
 
     public void inserirVenda(){
@@ -128,7 +148,11 @@ public class RegistroDeVendas implements Validacoes {
         //Buscando cliente na lista de clientes cadastrados
         Cliente cliente = listaClientes.get(clienteNome);
         if (cliente == null){
+            System.out.println();
+            System.out.println("-----------------------------------------------------");
             System.out.println(clienteNome + " ainda não foi cadastrado como cliente!");
+            System.out.println("-----------------------------------------------------");
+
             return;
         } else {
             System.out.println("------------------------------------------------------");
@@ -136,25 +160,31 @@ public class RegistroDeVendas implements Validacoes {
             System.out.println("------------------------------------------------------");
         }
 
-        System.out.println();
         System.out.println("Agora preciso do nome da pessoa vendedora:");
         String vendedorNome = entrada.next();
 
         //Buscando pessoa vendedora na lista de vendedores cadastrados
         Vendedor vendedor = listaVendedores.get(vendedorNome);
         if (vendedor == null){
+            System.out.println();
+            System.out.println("-------------------------------------------------");
             System.out.println(vendedorNome + " não consta no meu banco de dados.");
+            System.out.println("-------------------------------------------------");
+            return;
         }
 
+        System.out.println();
         System.out.println("Tudo certo até aqui. Qual o valor da venda?");
         double valor = entrada.nextDouble();
 
+        System.out.println();
         System.out.println("Para encerrar, diga a data do ocorrido:");
         String data = entrada.next();
 
         Venda venda = new Venda(cliente, vendedor, valor, data);
         listaVendas.add(venda);
 
+        System.out.println();
         System.out.println("------------------------------------------------------");
         System.out.println("Pronto! A venda foi registrada com sucesso.");
         System.out.println("------------------------------------------------------");
@@ -178,21 +208,64 @@ public class RegistroDeVendas implements Validacoes {
         System.out.println();
         System.out.println("---------- PESQUISA DE COMPRAS POR CPF ----------");
 
+        System.out.println("Informe o CPF:");
+        String cpf = entrada.next();
+
+        System.out.println();
+        System.out.println("VENDAS COM ESSE CPF:");
+        System.out.println();
+
+        boolean vendasEncontradas = false;
+
         // Percorrer a lista de vendas
         for (Venda venda : listaVendas) {
             Cliente cliente = venda.getCliente();
 
-            System.out.println("Informe o CPF:");
-            String cpf = entrada.next();
-
             // Verificar se o CPF do cliente corresponde ao CPF informado
             if (cliente.getCpf().equals(cpf)) {
-                System.out.println();
                 System.out.println("Cliente: " + cliente.getNome());
                 System.out.println("Valor da venda: " + venda.getValorASerPago());
                 System.out.println("Data de registro: " + venda.getDataRegistro());
                 System.out.println("--------------------");
+                vendasEncontradas = true;
             }
+        }
+
+        if (!vendasEncontradas){
+            System.out.println("Não foram encontradas vendas com esse CPF.");
+        }
+
+    }
+
+    public void pesquisarComprasPorEmail(){
+        System.out.println();
+        System.out.println("---------- PESQUISA DE COMPRAS POR E-MAIL (VENDEDORES) ----------");
+
+        System.out.println("Informe o e-mail do vendedor:");
+        String email = entrada.next();
+
+        System.out.println();
+        System.out.println("VENDAS COM ESSE E-MAIL:");
+        System.out.println();
+
+        boolean vendasEncontradas = false;
+
+        // Percorrer a lista de vendas
+        for (Venda venda : listaVendas) {
+            Vendedor vendedor = venda.getVendedor();
+
+            // Verificar se o e-mail do cliente corresponde ao e-mail informado
+            if (vendedor.getEmail().equals(email)) {
+                System.out.println("Cliente: " + venda.getCliente().getNome());
+                System.out.println("Valor da venda: " + venda.getValorASerPago());
+                System.out.println("Data de registro: " + venda.getDataRegistro());
+                System.out.println("--------------------");
+                vendasEncontradas = true;
+            }
+        }
+
+        if (!vendasEncontradas){
+            System.out.println("Não foram encontradas vendas com esse e-mail.");
         }
     }
 
